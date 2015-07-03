@@ -26,4 +26,5 @@ def spiel(entscheidera, entscheiderb, regeln)
     nummer %= 2
     wisser = spieler[nummer].runde(wisser)
   end
+  return nummer
 end

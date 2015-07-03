@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# für alle Karten eines Spielers verantwortlich
 class Stapel
 
   def initialize(karten, feld, ablage = [], hand = [])
@@ -47,15 +49,16 @@ class Stapel
     end
   end
 
-  # zieht drei Karten
-  def handfuellen
-    3.times {ziehen}
+  # zieht n Karten
+  def handfuellen(n)
+    n.times {ziehen}
   end
 
   # legt die Handkarten hin
   def legen(befehle)
     befehle.each do |b|
-      @feld.legen(b,@hand.pop)
+      ablegen = @feld.legen(b, @hand.pop)
+      @ablage.push(ablegen) if ablegen
     end
     @ablage += @hand
     @hand = []
@@ -85,9 +88,13 @@ class Stapel
     @ablage += @feld.ablegen(pos)
   end
 
-  #erhält eine Karte
-  def erhalten(karte)
-    @ablage.push(karte)
+  #erhält rueckgabe von abwerfen. Nimmt entsprechende Karten
+  def erhalten(rueck, pos)
+    if rueck[0] == :verloren
+      @ablage += rueck[1]
+    elsif rueck[0] == :unentschieden
+      ablegen(pos)
+    end
   end
 
   def laenge

@@ -4,15 +4,15 @@
 $:.unshift File.dirname(__FILE__)
 require "Karte.rb"
 require "Wisser.rb"
-require "Spieler"
+require "Spieler.rb"
 require "Feld.rb"
 require "Reihe.rb"
 require "Stapel.rb"
 
 # führt ein Spiel durch und gibt den Gewinner zurück
 def spiel(entscheidera, entscheiderb, regeln)
-  stapela = regeln.stapela
-  stapelb = regeln.stapelb
+  stapela = Stapel.new(regeln.stapela)
+  stapelb = Stapel.new(regeln.stapelb)
   spieler = [
              Spieler.new(stapela, stapelb, entscheidera, regeln),
              Spieler.new(stapelb, stapela, entscheiderb, regeln)
@@ -20,8 +20,11 @@ def spiel(entscheidera, entscheiderb, regeln)
   nummer = 0
   stapela.auslegen(4)
   stapelb.auslegen(3)
+  stapelb.neulegen(1)
+  stapela.feld.neu
+  stapelb.feld.neu
   wisser = Wisser.new
-  wisser.stapel_gegner = stapela.dup
+  wisser.gegner_stapel = stapela.dup
   until spieler[nummer].verloren?
     nummer += 1
     nummer %= 2

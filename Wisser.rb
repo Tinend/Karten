@@ -14,7 +14,7 @@ class Wisser
     @befehle = befehle
   end
 
-  def erfolg_haben(rueck)
-    @erfolge.push(rueck)
+  def erfolg_haben(rueck, pos)
+    @erfolge.push([rueck, pos])
   end
 end

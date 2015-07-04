@@ -10,7 +10,7 @@ class Spieler
     @entscheider = entscheider
     begin
       @entscheider.erklaeren(@regeln.handkarten, @regeln.neustrafe, @regeln.maxnamenlaenge, @regeln.maxkartenwert, @regeln.kartenzahl)
-    rescue
+    rescue => e
       puts e.message
       puts e.backtrace     
     end
@@ -25,12 +25,12 @@ class Spieler
   # Falls der Entscheider eine Exception aufruft, wird diese Abgefangen. Der Entscheider dann verliert automatisch.
   def runde(wisser_selbst)
     wisser_gegner = Wisser.new
-    @stapel.handfuellen(regeln.handkarten)
+    @stapel.handfuellen(@regeln.handkarten)
     wisser_selbst.eigener_stapel = @stapel.dup
     begin
       befehle = @entscheider.befehle(wisser_selbst)
       teste(befehle)
-      @wisser.befehlen(befehle, @stapel.hand.dup)
+      wisser_gegner.befehlen(befehle, @stapel.hand.dup)
       neu = @stapel.legen(befehle)
       @gegnerstapel.neulegen(neu)
     rescue => e
@@ -52,7 +52,7 @@ class Spieler
   end
 
   # testet den Zug auf Legalität
-  def testen(befehl)
+  def teste(befehl)
     if befehl.length > @stapel.hand.length
       raise "Länge des Befehls stimmt nicht!"
     end

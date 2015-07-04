@@ -7,8 +7,8 @@ require "Regeln.rb"
 require "Tichu.rb"
 require "entscheider/Mensch.rb"
 
-karten = tichu()
-regeln = Regeln.new(karten, 3, 0, 0)
+kartenname, karten = tichu()
+regeln = Regeln.new(karten, 3, 1, 0)
 entscheidera = Mensch.new
 entscheiderb = Mensch.new
 gewinner = spiel(entscheidera, entscheiderb, regeln)

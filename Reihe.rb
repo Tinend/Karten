@@ -13,6 +13,10 @@ class Reihe
     return @karten.min
   end
 
+  def erhalte(karte)
+    @karten.push(karte)
+  end
+
   # berechne staerke
   def staerke
     summe = 0

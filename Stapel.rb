@@ -3,15 +3,15 @@
 # für alle Karten eines Spielers verantwortlich
 class Stapel
 
-  def initialize(karten, feld, ablage = [], hand = [])
-    @nachziestapel = karten
+  def initialize(karten, feld = Feld.new([]), ablage = [], hand = [])
+    @nachziehstapel = karten
     @ablage = ablage
     @feld = feld
     @hand = hand
     @verloren = false
   end
 
-  attr_reader :feld, :ablage, :nachziestapel, :hand
+  attr_reader :feld, :ablage, :nachziehstapel, :hand
 
   # gibt an, wie viele Karten noch verfügbar sind
   def vorrat
@@ -24,7 +24,7 @@ class Stapel
 
   #erstellt Clon
   def dup
-    return Stapel.new(@nachziestapel.shuffle, @feld.dup, @ablage.dup, @hand.dup)
+    return Stapel.new(@nachziehstapel.shuffle, @feld.dup, @ablage.dup, @hand.dup)
   end
 
   #zieht eine Karte, falls möglich
@@ -46,6 +46,7 @@ class Stapel
       n.times do
         @feld.legen(-2, @hand.pop)
       end
+    end
   end
 
   #zieht eine Karte und wirft sie ab, falls möglich, andernfalls verliert diese Seite
@@ -73,7 +74,7 @@ class Stapel
   def legen(befehle)
     befehle.each do |b|
       ablegen = @feld.legen(b, @hand.pop)
-      @ablage.push(ablegen) if ablegen
+      @ablage.push(ablegen) if ablegen.class == Karte
     end
     @ablage += @hand
     @hand = []
@@ -96,7 +97,7 @@ class Stapel
   # ist die Reihe jedoch leer, so verliert er einen vom Nachziehstapel
   def abwerfen(pos, staerke_gegner)
     rueck = @feld.abwerfen(pos, staerke_gegner)
-    if rueck[0] == :unendschieden
+    if rueck[0] == :unentschieden
       @ablage += rueck[1]
     elsif rueck[0] == :verloren and rueck[1].length == 0
       rueck[1].push(abwerfen!)

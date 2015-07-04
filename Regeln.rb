@@ -1,6 +1,6 @@
 class Regeln
   def initialize(kartenset, hand = 3, neustrafe = 0, aufteilung = 0)
-    @kartenset = kartenset.schuffle
+    @kartenset = kartenset.shuffle!
     aufteilung += @kartenset.length / 2
     @stapela = kartenset[0.. aufteilung - 1]
     @stapelb = kartenset[aufteilung .. @kartenset.length - 1]
@@ -24,10 +24,10 @@ class Regeln
   attr_reader :stapela, :stapelb, :handkarten, :neustrafe, :maxnamenlaenge, :maxkartenwert
 
   def kartenzahl
-    return @set.length
+    return @kartenset.length
   end
 
   def maxlaenge(neu)
-    return hand - neustrafe * neu
+    return @handkarten - @neustrafe * neu
   end
 end

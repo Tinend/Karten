@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 def tichu
   set = Array.new(36) {|i|
-    Karte((i / 4 + 1).to_s, (i / 4 + 1))
+    Karte.new((i / 4 + 2).to_s, (i / 4 + 2))
   }
   4.times {set.push(Karte.new("Bube", 12))}
   4.times {set.push(Karte.new("Dame", 13))}

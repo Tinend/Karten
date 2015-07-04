@@ -4,6 +4,8 @@ class Mensch
     @name = gets.chomp
   end
   
+  attr_reader :name
+
   # erfaehrt Regeln
   def erklaeren(handkarten, neustrafe, maxnamenlaenge, maxkartenwert, kartenzahl)
     @handkarten = handkarten

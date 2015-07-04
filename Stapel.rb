@@ -38,6 +38,16 @@ class Stapel
     end
   end
 
+  def auslegen(n)
+    n.times {ziehen}
+    if @hand.length < n
+      @verloren = true
+    else
+      n.times do
+        @feld.legen(-2, @hand.pop)
+      end
+  end
+
   #zieht eine Karte und wirft sie ab, falls möglich, andernfalls verliert diese Seite
   def abwerfen!
     if @nachziehstapel.length > 0

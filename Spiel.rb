@@ -18,7 +18,8 @@ def spiel(entscheidera, entscheiderb, regeln)
              Spieler.new(stapelb, stapela, entscheiderb, regeln)
             ]
   nummer = 0
-  #
+  stapela.auslegen(4)
+  stapelb.auslegen(3)
   wisser = Wisser.new
   wisser.stapel_gegner = stapela.dup
   until spieler[nummer].verloren?
@@ -26,5 +27,7 @@ def spiel(entscheidera, entscheiderb, regeln)
     nummer %= 2
     wisser = spieler[nummer].runde(wisser)
   end
+  nummer += 1
+  nummer %= 2
   return nummer
 end

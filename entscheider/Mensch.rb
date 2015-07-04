@@ -88,11 +88,8 @@ class Mensch
       elsif eingabe[i] == -1
         laenge += 1
       end
-      p [i, laenge, max]
       i += 1
     end
-    puts
-    p [eingabe[0..[laenge - 1, eingabe.length - 1].min], i, laenge, eingabe.length, @handkarten]
     eingabe[0..[laenge - 1, eingabe.length - 1].min]
   end
 

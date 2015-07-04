@@ -5,13 +5,13 @@ $:.unshift File.dirname(__FILE__)
 require "Spiel.rb"
 require "Regeln.rb"
 require "Tichu.rb"
-require "entscheider/Mensch.rb"
+require "Entscheider.rb"
 
 kartenname, karten = tichu()
 karten *= 3
 regeln = Regeln.new(karten, 3, 1, 0)
-entscheidera = Mensch.new
-entscheiderb = Mensch.new
+entscheidera = entscheider_wahl
+entscheiderb = entscheider_wahl
 gewinner = spiel(entscheidera, entscheiderb, regeln)
 puts "Der Gewinner ist..."
 sleep(1)

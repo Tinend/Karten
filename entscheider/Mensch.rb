@@ -81,7 +81,7 @@ class Mensch
     laenge = @handkarten
     i = 0
     max = wisser.eigener_stapel.laenge
-    while i < laenge
+    while i < laenge and i < eingabe.length
       if eingabe[i] < -1 or eingabe[i] >= max
         laenge -= @neustrafe
         max += 1

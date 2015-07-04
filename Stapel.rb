@@ -13,6 +13,11 @@ class Stapel
 
   attr_reader :feld, :ablage, :nachziestapel, :hand
 
+  # gibt an, wie viele Karten noch verfügbar sind
+  def vorrat
+    return @ablage.length + @nachziehstapel.length + @hand.length
+  end
+
   def verloren?
     @verloren
   end
@@ -62,6 +67,12 @@ class Stapel
     end
     @ablage += @hand
     @hand = []
+    return @feld.neu
+  end
+
+  # gibt dem Feld weiter, dass neue Reihen gelegt werden müssen.
+  def neulegen(neu)
+    @feld.neulegen(neu)
   end
   
   # gibt die Stärke einer Reihe auf dem Feld zurück
@@ -97,6 +108,7 @@ class Stapel
     end
   end
 
+  # gibt Feldlänge an
   def laenge
     return @feld.laenge
   end

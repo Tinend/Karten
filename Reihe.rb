@@ -3,8 +3,14 @@ class Reihe
     @karten = karten
   end
 
+  attr_reader :karten
+
   def dup
     return Reihe.new(@karten.dup)
+  end
+
+  def min
+    return @karten.min
   end
 
   # berechne staerke

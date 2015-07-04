@@ -8,7 +8,13 @@ class Spieler
     @regeln = regeln
     @verloren = false
     @entscheider = entscheider
-    @entscheider.erklaeren(@regeln.handkarten, @regeln.neustrafe)
+    begin
+      @entscheider.erklaeren(@regeln.handkarten, @regeln.neustrafe, @regeln.maxnamenlaenge, @regeln.maxkartenwert, @regeln.kartenzahl)
+    rescue
+      puts e.message
+      puts e.backtrace     
+    end
+    # Ich denke, hier muss der Entscheider noch nicht verlieren
   end
 
   def verloren?
@@ -25,7 +31,8 @@ class Spieler
       befehle = @entscheider.befehle(wisser_selbst)
       teste(befehle)
       @wisser.befehlen(befehle, @stapel.hand.dup)
-      @stapel.legen(befehle)
+      neu = @stapel.legen(befehle)
+      @gegnerstapel.neulegen(neu)
     rescue => e
       puts e.message
       puts e.backtrace

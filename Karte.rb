@@ -4,4 +4,10 @@ class Karte
     @wert = wert
   end
   attr_reader :wert, :name
+
+  def <=>(x)
+    r = (x <=> @wert)
+    return -r
+  end
+
 end

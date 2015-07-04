@@ -5,7 +5,10 @@ class Feld
 
   def initialize(reihen)
     @reihen = reihen
+    @neu = 0
   end
+
+  attr_reader :reihen
 
   def dup
     ar = Array.new(@reihen.length) {|i| @reihen[i].dup}
@@ -17,10 +20,25 @@ class Feld
     # -1 bedeutet abwerfen!
     if pos < -1 or pos > @reihen.length
       @reihen.push(Reihe.new([karte]))
+      @neu += 1
     elsif pos == -1
       return karte
     else
       @reihen[pos].erhalte(karte)
+    end
+  end
+
+  # gibt zurück, wie viele neue Reihen gelegt wurden
+  def neu
+    n = @neu
+    @neu = 0
+    return n
+  end
+
+  # legt neue Reihen an
+  def neulegen(neu)
+    neu.times do
+      @reihen.push(Reihe.new([]))
     end
   end
 

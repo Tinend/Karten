@@ -6,10 +6,25 @@ class Feld
   def initialize(reihen)
     @reihen = reihen
     @neu = 0
-    @loeschen = 0
+    @loeschen = []
   end
 
   attr_reader :reihen
+
+  #löscht überflüssige Reihen
+  def delete
+    while @loeschen.length > 0
+      l = @loeschen.pop
+      @reihen.delete_at(l)
+      @loeschen.collect!{|loe|
+        if loe > l
+          loe - 1
+        else
+          loe
+        end
+      }
+    end
+  end
 
   def dup
     reihen = Array.new(@reihen.length) {|i| @reihen[i].dup}
@@ -19,7 +34,6 @@ class Feld
   # legt eine Karte an die Position x
   def legen(pos, karte)
     # -1 bedeutet abwerfen!
-    pos -= @loeschen
     if pos < -1 or pos >= @reihen.length
       @reihen.push(Reihe.new([karte]))
       @neu += 1
@@ -34,7 +48,7 @@ class Feld
   def neu
     n = @neu
     @neu = 0
-    @loeschen = 0
+    @loeschen = []
     return n
   end
 
@@ -47,13 +61,11 @@ class Feld
 
   # rechnet die Stärke an der Stelle pos aus
   def staerke(pos)
-    pos -= @loeschen
     @reihen[pos].staerke
   end
   
   # testet, ob Karten verloren gehen
   def abwerfen(pos, staerke_gegner)
-    pos -= @loeschen
     rueck = @reihen[pos].abwerfen(staerke_gegner)
     if rueck[0] == :unentschieden
       rueck[1] = ablegen(pos)
@@ -67,10 +79,8 @@ class Feld
 
   # legt eine Reihe ab
   def ablegen(pos)
-    pos -= @loeschen
     ablage = @reihen[pos].ablegen
-    @reihen.delete_at(pos)
-    @loeschen += 1
+    @loeschen.push(pos)
     return ablage
   end
 end

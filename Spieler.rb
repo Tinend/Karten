@@ -2,9 +2,9 @@
 
 # für Entscheider verantwortlich
 class Spieler
-  def initialize(stapel, gegnerstapel, entscheider, regeln)
+  def initialize(stapel, gegner_stapel, entscheider, regeln)
     @stapel = stapel
-    @gegnerstapel = gegnerstapel
+    @gegner_stapel = gegner_stapel
     @regeln = regeln
     @verloren = false
     @entscheider = entscheider
@@ -32,18 +32,20 @@ class Spieler
       teste(befehle)
       wisser_gegner.befehlen(befehle, @stapel.hand.dup)
       neu = @stapel.legen(befehle)
-      @gegnerstapel.neulegen(neu)
+      @gegner_stapel.neulegen(neu)
     rescue => e
       puts e.message
       puts e.backtrace
       @verloren = true
     end
     @stapel.laenge.times do |pos|
-      staerke = @gegnerstapel.staerke(pos)
+      staerke = @gegner_stapel.staerke(pos)
       rueck = @stapel.abwerfen(pos, staerke)
       wisser_gegner.erfolg_haben(rueck, pos)
-      @gegnerstapel.erhalten(rueck, pos)
+      @gegner_stapel.erhalten(rueck, pos)
     end
+    @gegner_stapel.delete
+    @stapel.delete
     wisser_gegner.gegner_stapel = @stapel.dup
     if @stapel.verloren?
       @verloren = true
@@ -58,14 +60,16 @@ class Spieler
     end
     nummer = 0
     neu = 0
+    max = @stapel.laenge
     befehl.each do |b|
       if b != -1
         nummer += 1
       end
-      if b < -1 or b >= @stapel.laenge
+      if b < -1 or b >= max
+        max += 1
         neu += 1
       end
     end
-    raise if nummer > @regeln.maxlaenge(neu)
+    raise "Die Regeln wurden nicht beachtet! #{nummer} bei maximal #{@regeln.maxlaenge(neu)}" if nummer > @regeln.maxlaenge(neu)
   end
 end

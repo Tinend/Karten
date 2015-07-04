@@ -38,7 +38,7 @@ class Mensch
   def befehle(wisser)
     puts "Die Runde von #{@name} beginnt."
     wisser.befehle.each_with_index do |b, i|
-      puts "Der Gegner legte die Karte #{wisser.gegner_hand[i].name} an den Ort #{b + 1}."
+      puts "Der Gegner legte die Karte #{wisser.gegner_hand[wisser.gegner_hand.length - i - 1].name} an den Ort #{b + 1}."
     end
     puts "Du hast noch #{wisser.eigener_stapel.vorrat} Karten in deinem Stapel. (Mit Hand)"
     puts "Dein Gegner hat noch #{wisser.gegner_stapel.vorrat} Karten in seinem Stapel."
@@ -85,13 +85,15 @@ class Mensch
       if eingabe[i] < -1 or eingabe[i] >= max
         laenge -= @neustrafe
         max += 1
+      elsif eingabe[i] == -1
+        laenge += 1
       end
-      i -= 1
+      p [i, laenge, max]
+      i += 1
     end
-    if laenge < i
-      lange -= 1
-    end
-    eingabe[0..laenge]
+    puts
+    p [eingabe[0..[laenge - 1, eingabe.length - 1].min], i, laenge, eingabe.length, @handkarten]
+    eingabe[0..[laenge - 1, eingabe.length - 1].min]
   end
 
   def schreibe(laenge, string)

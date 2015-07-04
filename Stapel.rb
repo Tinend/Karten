@@ -22,6 +22,11 @@ class Stapel
     @verloren
   end
 
+  #weiterleiten
+  def delete
+    @feld.delete
+  end
+
   #erstellt Clon
   def dup
     return Stapel.new(@nachziehstapel.shuffle, @feld.dup, @ablage.dup, @hand.dup)
@@ -73,8 +78,8 @@ class Stapel
   # legt die Handkarten hin
   def legen(befehle)
     befehle.each do |b|
-      ablegen = @feld.legen(b, @hand.pop)
-      @ablage.push(ablegen) if ablegen.class == Karte
+      ablege = @feld.legen(b, @hand.pop)
+      @ablage.push(ablege) if ablege.class == Karte
     end
     @ablage += @hand
     @hand = []

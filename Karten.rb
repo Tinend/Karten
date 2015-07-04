@@ -8,6 +8,7 @@ require "Tichu.rb"
 require "entscheider/Mensch.rb"
 
 kartenname, karten = tichu()
+karten *= 3
 regeln = Regeln.new(karten, 3, 1, 0)
 entscheidera = Mensch.new
 entscheiderb = Mensch.new

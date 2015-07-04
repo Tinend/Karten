@@ -11,8 +11,8 @@ require "Stapel.rb"
 
 # führt ein Spiel durch und gibt den Gewinner zurück
 def spiel(entscheidera, entscheiderb, regeln)
-  stapela = regeln.stapel[0]
-  stapelb = regeln.stapel[1]
+  stapela = regeln.stapela
+  stapelb = regeln.stapelb
   spieler = [
              Spieler.new(stapela, stapelb, entscheidera, regeln),
              Spieler.new(stapelb, stapela, entscheiderb, regeln)

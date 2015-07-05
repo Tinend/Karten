@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class Dummi
   def initialize
-    @name = dummi
+    @name = "Dummi"
   end
   
   attr_reader :name
@@ -19,7 +19,7 @@ class Dummi
     until eingabe.length == @handkarten
       if wisser.gegner_stapel.laenge <= i
         eingabe.push(i)
-      elsif wisser.gegner_stapel.feld.reihen[i].staerke > wisser.eigen_stapel.feld.reihen[i].staerke
+      elsif wisser.gegner_stapel.feld.reihen[i].staerke > wisser.eigener_stapel.feld.reihen[i].staerke
         eingabe.push(i)
       end
       i += 1

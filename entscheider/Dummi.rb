@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+
+$:.unshift File.dirname(__FILE__)
+require "Zurechtschneiden.rb"
+
 class Dummi
+
+  include Zurechtschneiden
+
   def initialize
     @name = "Dummi"
   end
@@ -24,19 +31,7 @@ class Dummi
       end
       i += 1
     end
-    laenge = @handkarten
-    i = 0
-    max = wisser.eigener_stapel.laenge
-    while i < laenge and i < eingabe.length
-      if eingabe[i] < -1 or eingabe[i] >= max
-        laenge -= @neustrafe
-        max += 1
-      elsif eingabe[i] == -1
-        laenge += 1
-      end
-      i += 1
-    end
-    eingabe[0..[laenge - 1, eingabe.length - 1].min]
+    zurechtschneiden(eingabe, @neustrafe, wisser.eigener_stapel.laenge, @handkarten)
   end
 
 end

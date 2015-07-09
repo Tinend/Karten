@@ -31,7 +31,7 @@ class Dummi
       end
       i += 1
     end
-    zurechtschneiden(eingabe, @neustrafe, wisser.eigener_stapel.laenge, @handkarten)
+    zurechtschneiden(eingabe, wisser.eigener_stapel.laenge, wisser.eigener_stapel.hand.length)
   end
 
 end

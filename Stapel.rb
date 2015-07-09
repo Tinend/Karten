@@ -128,4 +128,16 @@ class Stapel
   def laenge
     return @feld.laenge
   end
+
+  #berechnet den Durchschnitt der Kartenwerte in Nachzieh und Ablagestapel
+  def stapelschnitt
+    summe = 0.0
+    @nachziehstapel.each do |karte|
+      summe += karte.wert
+    end
+    @ablage.each do |karte|
+      summe += karte.wert
+    end
+    return summe / (@nachziehstapel.length + @ablage.length)
+  end
 end

@@ -2,8 +2,9 @@
 $:.unshift File.dirname(__FILE__)
 require "entscheider/Mensch.rb"
 require "entscheider/Dummi.rb"
+require "entscheider/Minmax.rb"
 
-ENTSCHEIDER = [Mensch, Dummi]
+ENTSCHEIDER = [Mensch, Dummi, Minmax]
 def entscheider_wahl
   puts "Welchen Entscheider wählst du?"
   ENTSCHEIDER.each_with_index do |e, i|

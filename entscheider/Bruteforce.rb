@@ -1,6 +1,7 @@
 module Bruteforce
 
-  def brute()
+  # bruteforce alles durchprobieren
+  def brute
     handkarten = @wisser.eigener_stapel.hand.length
     laenge = @wisser.eigener_stapel.laenge + 2
     maxwahl = [-1, -1, -1]

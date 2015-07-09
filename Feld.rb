@@ -83,4 +83,13 @@ class Feld
     @loeschen.push(pos)
     return ablage
   end
+
+  #gibt einen Array mit allen Karten, die auf dem Feld liegen zurück
+  def alle_karten
+    karten = []
+    @reihen.each do |r|
+      karten += r.karten
+    end
+    return karten
+  end
 end

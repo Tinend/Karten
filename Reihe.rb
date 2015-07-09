@@ -1,3 +1,5 @@
+
+# Eine Reihe von Karten eines Spielers auf dem Feld
 class Reihe
   def initialize(karten)
     @karten = karten

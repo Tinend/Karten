@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 def tichu
+  set = []
   set = Array.new(36) {|i|
     Karte.new((i / 4 + 2).to_s, (i / 4 + 2))
   }

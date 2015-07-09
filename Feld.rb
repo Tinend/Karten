@@ -92,4 +92,9 @@ class Feld
     end
     return karten
   end
+
+  # gibt das Minimum der pos. Reihe zurück
+  def min(pos)
+    return @reihen[pos].min
+  end
 end

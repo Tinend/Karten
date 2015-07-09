@@ -43,6 +43,7 @@ class Stapel
     end
   end
 
+  #legt n Karten auf das Spielfeld
   def auslegen(n)
     n.times {ziehen}
     if @hand.length < n
@@ -148,5 +149,10 @@ class Stapel
   # gibt einen Array mit allen Karten des Spielers zurück
   def alle_karten
     return @ablage + @nachziehstapel + @hand + @feld.alle_karten
+  end
+
+  #weiterleiten
+  def min(pos)
+    @feld.min(pos)
   end
 end

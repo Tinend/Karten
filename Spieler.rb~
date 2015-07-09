@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+# für Entscheider und verantwortlich
+class Spieler
+  def initialize(feld, entscheider, regeln)
+    @feld = feld
+    @entscheider = entscheider
+    @regeln = regeln
+  end
+
+
+end

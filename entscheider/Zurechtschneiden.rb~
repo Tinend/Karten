@@ -1,0 +1,4 @@
+module Zurechtschneiden
+  def zurechtschneiden(array)
+  end
+end

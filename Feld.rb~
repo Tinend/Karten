@@ -1,0 +1,5 @@
+class Feld
+  def initialize(reihen)
+    @reihen = reihen
+  end
+end

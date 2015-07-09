@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+# -*- coding: utf-8 -*-
+
+require "/home/ulrich/ruby/blume2-0/Version.rb"
+require "/home/ulrich/ruby/blume2-0/umwandeln.rb"
+require "/home/ulrich/ruby/blume2-0/felder/Feld3-0.rb"
+require "/home/ulrich/ruby/blume2-0/Farben.rb"

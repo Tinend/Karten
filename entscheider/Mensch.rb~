@@ -1,0 +1,31 @@
+class Mensch
+  def initialize
+    puts "Wie willst du heissen?"
+    @name = gets.chomp
+  end
+  
+  def erklaeren(handkarten, neustrafe)
+    @handkarten = handkarten
+    @neustrafe = neustrafe
+  end
+
+  def befehle(wisser)
+    puts "Die Runde von #{@name} beginnt."
+    wisser.befehle.each_with_index do |b, i|
+      puts "Der Gegner legte die Karte #{wisser.hand[i].name} an den Ort #{b}."
+    end
+    puts "Du hast noch #{wisser.eigener_stapel.vorrat} Karten in deinem Stapel. (Mit Hand)"
+    puts "Dein Gegner hat noch #{wisser.gegener_stapel.vorrat} Karten in seinem Stapel."
+
+
+    liegen_eigen = 0
+    wisser.eigener_stapel.feld.reihen.each do |r|
+      liegen_eigen += r.karten.length
+    end
+    liegen_gegner = 0
+    wisser.gegener_stapel.feld.reihen.each do |r|
+      liegen_gegner += r.karten.length
+    end
+    puts "Der Gegner"
+  end
+end

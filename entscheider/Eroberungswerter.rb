@@ -13,7 +13,7 @@ class Eroberungswerter
   include Bruteforce
 
   def initialize
-    @name = "Eroberungswerter" + rand(4).to_s
+    @name = "Eroberungswerter"
     @wkeiten = []
   end
   
@@ -54,6 +54,10 @@ class Eroberungswerter
         lege[w] += 1
         lege_staerke[w].push(@wisser.eigener_stapel.hand[i].wert)
       elsif w == -1
+        if  @wisser.eigener_stapel.hand[i] == nil
+          p [@wisser.eigener_stapel.hand, i, @wisser.eigener_stapel.hand.length, wahl]
+          raise "Eroberung fehlgeschlagen!"
+        end
         summe += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
         summewurf += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
       else

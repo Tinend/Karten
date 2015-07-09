@@ -15,10 +15,10 @@ class Regeln
   end
 
   def neues_spiel(aufteilung = 0)
-    @kartenset.schuffle!
+    @kartenset.shuffle!
     aufteilung += @kartenset.length / 2
-    @stapela = kartenset[0.. aufteilung - 1]
-    @stapelb = kartenset[aufteilung .. @kartenset.length - 1]
+    @stapela = @kartenset[0.. aufteilung - 1]
+    @stapelb = @kartenset[aufteilung .. @kartenset.length - 1]
   end
 
   attr_reader :stapela, :stapelb, :handkarten, :neustrafe, :maxnamenlaenge, :maxkartenwert

@@ -1,0 +1,7 @@
+class Wisser
+  def initialize
+    @eigener_stapel = nil
+    @gegner_stapel = nil
+  end
+  attr_accessor :eigener_stapel, :gegner_stapel
+end

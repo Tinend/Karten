@@ -131,13 +131,22 @@ class Stapel
 
   #berechnet den Durchschnitt der Kartenwerte in Nachzieh und Ablagestapel
   def stapelschnitt
-    summe = 0.0
-    @nachziehstapel.each do |karte|
-      summe += karte.wert
+    if (@nachziehstapel.length + @ablage.length) > 0
+      summe = 0.0
+      @nachziehstapel.each do |karte|
+        summe += karte.wert
+      end
+      @ablage.each do |karte|
+        summe += karte.wert
+      end
+      return summe / (@nachziehstapel.length + @ablage.length)
+    else
+      return 0
     end
-    @ablage.each do |karte|
-      summe += karte.wert
-    end
-    return summe / (@nachziehstapel.length + @ablage.length)
+  end
+
+  # gibt einen Array mit allen Karten des Spielers zurück
+  def alle_karten
+    return @ablage + @nachziehstapel + @hand + @feld.alle_karten
   end
 end

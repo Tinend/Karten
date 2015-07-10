@@ -12,7 +12,6 @@ module Zurechtschneiden
       end
       i += 1
     end
-    p [laenge - 1, eingabe.length - 1, handlaenge - 1, i]
     return [] if [laenge - 1, eingabe.length - 1, handlaenge - 1].min < 0
     eingabe[0..[laenge - 1, eingabe.length - 1, handlaenge - 1].min]
   end

@@ -31,9 +31,7 @@ class Dummi
       end
       i += 1
     end
-    p eingabe
     eingabe = zurechtschneiden(eingabe, wisser.eigener_stapel.laenge, wisser.eigener_stapel.hand.length)
-    p eingabe
     eingabe
   end
 

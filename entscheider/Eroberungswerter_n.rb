@@ -8,24 +8,32 @@ class Eroberungswerter_n
 
   KARTENWERT = 10
   ZUGWERT = 5
+  Q = 2.5
 
   include Zurechtschneiden
   include Bruteforce
 
-  def initialize
-    @name = "Eroberungswerter"
+  def initialize(q = Q)
+    @q = q
+    @name = "Eroberungswerter_n"
     @wkeiten = []
   end
   
   # berechnet die Wkeit, dass der Gegner drüber geht. (eher pessimistisch)
   def wkeit(wert)
     if wert <= 0
-      return 1.0
-    elsif wert >= @wkeiten.length
       return 0.0
-    else
-      return @wkeiten[wert]
     end
+    summe = 0.0
+    @wkeiten.each_with_index do |wkeiten, i|
+      if wert < wkeiten.length and i > 0
+        summe += @q ** (i - 1) * wkeiten[wert]
+      elsif i > 0
+        summe += @q ** (i - 1)
+      end
+    end
+    summe *= (1 - @q) / (1 - @q ** (@wkeiten.length - 1))
+    return summe
   end
   
   # berechnet die Summe der Werte eines Zahlenarrays
@@ -61,17 +69,17 @@ class Eroberungswerter_n
         summe += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
         summewurf += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
       else
-        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
-        summeneu += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
+        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(@wisser.eigener_stapel.hand[i].wert))
+        summeneu += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(@wisser.eigener_stapel.hand[i].wert))
       end
     end
     differenzen.each_with_index do |d, i|
       if d > 0 and @wisser.gegner_stapel.staerke(i) > 0
-        summe += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
-        summeerobern += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
+        summe += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (wkeit(d))
+        summeerobern += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (wkeit(d))
       elsif d > 0
-        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
-        summeerobern +=(@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
+        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(d))
+        summeerobern +=(@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(d))
       elsif d == 0
         summe += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
         summe -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
@@ -91,7 +99,7 @@ class Eroberungswerter_n
     return summe
   end
 
-  attr_reader :name
+  attr_reader :name, :q
 
   # erfaehrt Regeln
   def erklaeren(handkarten, neustrafe, maxnamenlaenge, maxkartenwert, kartenzahl)
@@ -101,51 +109,41 @@ class Eroberungswerter_n
     @wkeiten = []
   end
   
-  def wkeit_n(n, wert)
-    wahrscheinlichkeit = 0.0
-    if n == 0
-      wahrscheinlichkeit = 1.0
-    elsif n == 1
-      karten.each do |k|
-        if (k <=> wert) == 1
-          wahrscheinlichkeit += 1.0
-        elsif (k <=> wert) == 0
-          wahrscheinlichkeit += 0.5
-        end
-      end
-      wahrscheinlichkeit / karten.length
-    elsif n == 2
-      pos = @karten.length - 1
-      @karten.each do |k|
-        while k.wert + @karten[pos].wert > wert and pos > 0
-          pos -= 1
-        end
-        wahrscheinlichkeit += (@karten.length - 1 - pos)
-        while k.wert +  @karten[pos].wert == wert and pos > 0
-          pos -= 1
-          wahrscheinlichkeit += 0.5
-        end
-      end
-      wahrscheinlichkeit /= @karten.length ** 2
-    else
-      @karten.each do |k|
-        wahrscheinlichkeit += wkeit_n(n - 1, wert - k.wert)
-      end
-      wahrscheinlichkeit /= @karten.length
-    end
-    return wahrscheinlichkeit
-  end
-
-  #erstellt einen Array mit den Wahrscheinlichkeiten, wie hoch es ist einen bestimmten Wert überschreiten zu können (eher pessimistisch)
+  # erstellt einen Array mit den Wahrscheinlichkeiten, dass k Karten weniger als den Wert n erreichen.
   def erstelle_wkeiten
     @karten = @wisser.eigener_stapel.alle_karten + @wisser.gegner_stapel.alle_karten
     @karten.sort!
-    @wkeiten = Array.new(2 * @maxkartenwert + 1) do |wert|
-      wahrscheinlichkeit = 0.0
-      @handkarten.times do |i|
-        wahrscheinlichkeit += 2 ** -i / (2 - 2 ** (-@handkarten + 1)) * wkeit_n(i + 1, wert)
+    @wkeiten = Array.new(@handkarten + 1) {|i| Array.new(@maxkartenwert * i + 1, 0)}
+    @wkeiten[0][0] = 1
+    @karten.each do |k|
+      (@wkeiten.length - 1).times do |i|
+        @wkeiten[@wkeiten.length - 2 - i].each_with_index do |anzahl, j|
+          if @wkeiten[@wkeiten.length - 1 - i][j + k.wert]
+            @wkeiten[@wkeiten.length - 1 - i][j + k.wert] += anzahl
+          end
+        end
       end
     end
+    @wkeiten.each_with_index do |w, i|
+      summe = 0
+      w.collect! do |anzahl|
+        summe += anzahl
+        summe / (tief(@karten.length, i)).to_f
+      end
+    end
+    @wkeiten.each do |wahr|
+      wahr.each_with_index do |w,i|
+      end
+    end
+  end
+
+  def tief(n, k)
+    erg = 1
+    k.times do |i|
+      erg *= (n - i)
+      erg /= i + 1
+    end
+    erg
   end
 
   # macht einen Zug

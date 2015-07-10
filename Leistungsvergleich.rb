@@ -8,10 +8,10 @@ require "Tichu.rb"
 require "Entscheider.rb"
 require "Entscheider_Merker.rb"
 
-entscheider = Array.new((ENTSCHEIDER.length - 1)) {|i| Entscheider_Merker.new(ENTSCHEIDER[i + 1].new, i)}
+entscheider = Array.new(2) {|i| Entscheider_Merker.new(entscheider_wahl, i)}
 kartenname, karten = tichu
 regeln = Regeln.new(karten, 3, 1, 0)
-runden = 4
+runden = 100
 spiele = entscheider.length * (entscheider.length - 1) * runden
 runden.times do
   entscheider.each_with_index do |enta, i|

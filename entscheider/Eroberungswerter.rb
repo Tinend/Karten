@@ -40,11 +40,11 @@ class Eroberungswerter
   #bewertet einen Zug
   def bewerte(wahl)
     summe = 0
-    summewurf = 0
-    summeneu = 0
-    summeerobern = 0
-    summegleich = 0
-    summeverlieren = 0
+   # summewurf = 0
+   # summeneu = 0
+   # summeerobern = 0
+   # summegleich = 0
+   # summeverlieren = 0
     differenzen = Array.new(@wisser.eigener_stapel.laenge) {|i| @wisser.eigener_stapel.staerke(i) - @wisser.gegner_stapel.staerke(i)}
     lege = Array.new(@wisser.eigener_stapel.laenge, 0)
     lege_staerke = Array.new(@wisser.eigener_stapel.laenge, [])
@@ -59,30 +59,30 @@ class Eroberungswerter
           raise "Eroberung fehlgeschlagen!"
         end
         summe += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
-        summewurf += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
+      #  summewurf += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
       else
         summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
-        summeneu += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
+      #  summeneu += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
       end
     end
     differenzen.each_with_index do |d, i|
       if d > 0 and @wisser.gegner_stapel.staerke(i) > 0
         summe += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
-        summeerobern += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
+       # summeerobern += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
       elsif d > 0
         summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
-        summeerobern +=(@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
+       # summeerobern +=(@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
       elsif d == 0
         summe += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
         summe -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
-        summegleich += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
-        summegleich -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
+       # summegleich += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
+       # summegleich -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
       elsif @wisser.eigener_stapel.staerke(i) > 0
         summe -= @wisser.eigener_stapel.min(i).wert - @gegner_schnitt + KARTENWERT
-        summeverlieren -= @wisser.eigener_stapel.min(i).wert - @gegner_schnitt + KARTENWERT
+       # summeverlieren -= @wisser.eigener_stapel.min(i).wert - @gegner_schnitt + KARTENWERT
       else
         summe -= @eigener_schnitt - @gegner_schnitt + KARTENWERT
-        summeverlieren -= @eigener_schnitt - @gegner_schnitt + KARTENWERT
+       # summeverlieren -= @eigener_schnitt - @gegner_schnitt + KARTENWERT
       end
     end
     #staerken = Array.new(@handkarten) {|i| @wisser.eigener_stapel.hand[i].wert}

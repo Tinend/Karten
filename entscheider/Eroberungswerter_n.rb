@@ -8,7 +8,7 @@ class Eroberungswerter_n
 
   KARTENWERT = 10
   ZUGWERT = 5
-  Q = 2.5
+  Q = 0.76
 
   include Zurechtschneiden
   include Bruteforce
@@ -32,7 +32,11 @@ class Eroberungswerter_n
         summe += @q ** (i - 1)
       end
     end
-    summe *= (1 - @q) / (1 - @q ** (@wkeiten.length - 1))
+    if @q != 1
+      summe *= (1 - @q) / (1 - @q ** (@wkeiten.length - 1))
+    else
+      summe /= @wkeiten.length - 1
+    end
     return summe
   end
   

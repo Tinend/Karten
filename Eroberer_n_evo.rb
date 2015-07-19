@@ -8,32 +8,42 @@ require "Tichu.rb"
 require "Entscheider.rb"
 require "Entscheider_Merker.rb"
 
-epsilon = 20
-q = 1
-runden = 3
-anzahl = 5
+epsilon = 0.3
+q = 0.77
+runden = 1
+anzahl = 11
+faktor = 1.15
+minepsilon = 0.025
 kartenname, karten = tichu
 regeln = Regeln.new(karten, 3, 1, 0)
 spiele = anzahl * (anzahl - 1) * runden
-until epsilon < 0.001
-  entscheider = Array.new(5) {|i| Entscheider_Merker.new(Eroberungswerter_n.new(rand(0) * epsilon * 2 - epsilon + q), i)}
+until epsilon < minepsilon
+  entscheider = Array.new(anzahl) {|i| Entscheider_Merker.new(Eroberungswerter_n.new(epsilon * 2 * i / (anzahl - 1) - epsilon + q), i)}
+  entscheider.shuffle!
   runden.times do
-    entscheider.each_with_index do |enta, i|
-      entscheider.each_with_index do |entb, j|
-        if i != j
+    entscheider.each do |enta|
+      entscheider.shuffle.each do |entb|
+        if enta != entb
           regeln.neues_spiel
           gewinner = spiel(enta.entscheider, entb.entscheider, regeln, true)
           if gewinner == 0
-            enta.siege += 1
+            enta.besiege(entb)
           else
-            entb.siege += 1
+            entb.besiege(enta)
           end
         end
       end
     end
   end
+  q = 0
+  summe = 0
+  entscheider.each do |e|
+    p [e.entscheider.q, e.elo]
+    q += 2 ** (e.elo / 100.0) * e.entscheider.q
+    summe += 2 ** (e.elo / 100.0)
+  end
+  q /= summe
   entscheider.sort!.reverse!
-  epsilon /= 1.4
-  puts "Sieger #{entscheider[0].entscheider.q}, Epsilon #{epsilon}"
-  q = entscheider[0].entscheider.q
+  epsilon /= faktor
+  puts "Neues Q: #{q}, Epsilon #{epsilon}"
 end

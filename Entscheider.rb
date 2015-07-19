@@ -5,8 +5,9 @@ require "entscheider/Dummi.rb"
 require "entscheider/Minmax.rb"
 require "entscheider/Eroberungswerter.rb"
 require "entscheider/Eroberungswerter_n.rb"
+require "entscheider/Hochstapler.rb"
 
-ENTSCHEIDER = [Mensch, Dummi, Minmax, Eroberungswerter, Eroberungswerter_n]
+ENTSCHEIDER = [Mensch, Dummi, Minmax, Eroberungswerter, Eroberungswerter_n, Hochstapler]
 def entscheider_wahl
   puts "Welchen Entscheider wählst du?"
   ENTSCHEIDER.each_with_index do |e, i|

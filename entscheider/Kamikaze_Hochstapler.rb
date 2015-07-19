@@ -4,7 +4,7 @@ $:.unshift File.dirname(__FILE__)
 require "Zurechtschneiden.rb"
 require "Bruteforce.rb"
 
-class KamikazeHochstapler
+class Kamikaze_Hochstapler
 
   KARTENWERT = 10
   ZUGWERT = 5

@@ -6,6 +6,7 @@ require "entscheider/Minmax.rb"
 require "entscheider/Eroberungswerter.rb"
 require "entscheider/Eroberungswerter_n.rb"
 require "entscheider/Hochstapler.rb"
+require "entscheider/Kamikaze_Hochstapler.rb"
 
 ENTSCHEIDER = [Mensch, Dummi, Minmax, Eroberungswerter, Eroberungswerter_n, Hochstapler, Kamikaze_Hochstapler]
 def entscheider_wahl

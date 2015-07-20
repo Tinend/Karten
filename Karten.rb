@@ -10,8 +10,8 @@ require "Entscheider.rb"
 kartenname, karten = tichu()
 karten *= 3
 regeln = Regeln.new(karten, 3, 1, 0)
-entscheidera = entscheider_wahl
-entscheiderb = entscheider_wahl
+entscheidera = entscheider_wahl.new
+entscheiderb = entscheider_wahl.new
 gewinner = spiel(entscheidera, entscheiderb, regeln)
 puts "Der Gewinner ist..."
 sleep(1)

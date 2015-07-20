@@ -8,7 +8,7 @@ require "Tichu.rb"
 require "Entscheider.rb"
 require "Entscheider_Merker.rb"
 
-entscheider = Array.new(2) {|i| Entscheider_Merker.new(entscheider_wahl, i)}
+entscheider = Array.new(2) {|i| Entscheider_Merker.new(entscheider_wahl.new, i)}
 kartenname, karten = tichu
 regeln = Regeln.new(karten, 3, 1, 0)
 runden = 100

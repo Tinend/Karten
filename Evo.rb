@@ -17,8 +17,9 @@ minepsilon = 0.025
 kartenname, karten = tichu
 regeln = Regeln.new(karten, 3, 1, 0)
 spiele = anzahl * (anzahl - 1) * runden
+teste = entscheider_wahl
 until epsilon < minepsilon
-  entscheider = Array.new(anzahl) {|i| Entscheider_Merker.new(Eroberungswerter_n.new(epsilon * 2 * i / (anzahl - 1) - epsilon + q), i)}
+  entscheider = Array.new(anzahl) {|i| teste.new(Eroberungswerter_n.new(epsilon * 2 * i / (anzahl - 1) - epsilon + q), i)}
   entscheider.shuffle!
   runden.times do
     entscheider.each do |enta|

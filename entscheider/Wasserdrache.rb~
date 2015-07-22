@@ -3,43 +3,29 @@
 $:.unshift File.dirname(__FILE__)
 require "Zurechtschneiden.rb"
 require "Bruteforce.rb"
-require "Wkeiterstellen.rb"
 
-class Eroberungswerter_n
+class Eroberungswerter
 
   KARTENWERT = 10
   ZUGWERT = 5
-  Q = 0.76
 
   include Zurechtschneiden
   include Bruteforce
-  include Wkeiten
 
-  def initialize(q = Q)
-    @q = q
-    @name = "Eroberungswerter_n"
+  def initialize
+    @name = "Eroberungswerter"
     @wkeiten = []
   end
   
   # berechnet die Wkeit, dass der Gegner drüber geht. (eher pessimistisch)
   def wkeit(wert)
     if wert <= 0
+      return 1.0
+    elsif wert >= @wkeiten.length
       return 0.0
-    end
-    summe = 0.0
-    @wkeiten.each_with_index do |wkeiten, i|
-      if wert < wkeiten.length and i > 0
-        summe += @q ** (i - 1) * wkeiten[wert]
-      elsif i > 0
-        summe += @q ** (i - 1)
-      end
-    end
-    if @q != 1
-      summe *= (1 - @q) / (1 - @q ** (@wkeiten.length - 1))
     else
-      summe /= @wkeiten.length - 1
+      return @wkeiten[wert]
     end
-    return summe
   end
   
   # berechnet die Summe der Werte eines Zahlenarrays
@@ -54,11 +40,11 @@ class Eroberungswerter_n
   #bewertet einen Zug
   def bewerte(wahl)
     summe = 0
-    summewurf = 0
-    summeneu = 0
-    summeerobern = 0
-    summegleich = 0
-    summeverlieren = 0
+   # summewurf = 0
+   # summeneu = 0
+   # summeerobern = 0
+   # summegleich = 0
+   # summeverlieren = 0
     differenzen = Array.new(@wisser.eigener_stapel.laenge) {|i| @wisser.eigener_stapel.staerke(i) - @wisser.gegner_stapel.staerke(i)}
     lege = Array.new(@wisser.eigener_stapel.laenge, 0)
     lege_staerke = Array.new(@wisser.eigener_stapel.laenge, [])
@@ -73,30 +59,30 @@ class Eroberungswerter_n
           raise "Eroberung fehlgeschlagen!"
         end
         summe += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
-        summewurf += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
+      #  summewurf += @wisser.eigener_stapel.hand[i].wert - @eigener_schnitt - ZUGWERT
       else
-        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(@wisser.eigener_stapel.hand[i].wert))
-        summeneu += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(@wisser.eigener_stapel.hand[i].wert))
+        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
+      #  summeneu += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(@wisser.eigener_stapel.hand[i].wert))
       end
     end
     differenzen.each_with_index do |d, i|
       if d > 0 and @wisser.gegner_stapel.staerke(i) > 0
-        summe += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (wkeit(d))
-        summeerobern += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (wkeit(d))
+        summe += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
+       # summeerobern += (@wisser.gegner_stapel.min(i).wert - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
       elsif d > 0
-        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(d))
-        summeerobern +=(@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (wkeit(d))
+        summe += (@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
+       # summeerobern +=(@gegner_schnitt - @eigener_schnitt + KARTENWERT) * (1 - wkeit(d))
       elsif d == 0
         summe += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
         summe -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
-        summegleich += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
-        summegleich -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
+       # summegleich += @wisser.eigener_stapel.staerke(i) + summiere(lege_staerke[i]) - @eigener_schnitt * (@wisser.eigener_stapel.feld.reihen[i].karten.length + lege[i])
+       # summegleich -= @wisser.gegner_stapel.staerke(i) - @gegner_schnitt * @wisser.gegner_stapel.feld.reihen[i].karten.length
       elsif @wisser.eigener_stapel.staerke(i) > 0
         summe -= @wisser.eigener_stapel.min(i).wert - @gegner_schnitt + KARTENWERT
-        summeverlieren -= @wisser.eigener_stapel.min(i).wert - @gegner_schnitt + KARTENWERT
+       # summeverlieren -= @wisser.eigener_stapel.min(i).wert - @gegner_schnitt + KARTENWERT
       else
         summe -= @eigener_schnitt - @gegner_schnitt + KARTENWERT
-        summeverlieren -= @eigener_schnitt - @gegner_schnitt + KARTENWERT
+       # summeverlieren -= @eigener_schnitt - @gegner_schnitt + KARTENWERT
       end
     end
     #staerken = Array.new(@handkarten) {|i| @wisser.eigener_stapel.hand[i].wert}
@@ -105,7 +91,7 @@ class Eroberungswerter_n
     return summe
   end
 
-  attr_reader :name, :q
+  attr_reader :name
 
   # erfaehrt Regeln
   def erklaeren(handkarten, neustrafe, maxnamenlaenge, maxkartenwert, kartenzahl)
@@ -115,13 +101,33 @@ class Eroberungswerter_n
     @wkeiten = []
   end
   
-  def tief(n, k)
-    erg = 1
-    k.times do |i|
-      erg *= (n - i)
-      erg /= i + 1
+  #erstellt einen Array mit den Wahrscheinlichkeiten, wie hoch es ist einen bestimmten Wert überschreiten zu können (eher pessimistisch)
+  def erstelle_wkeiten
+    karten = @wisser.eigener_stapel.alle_karten + @wisser.gegner_stapel.alle_karten
+    karten.sort!
+    @wkeiten = Array.new(2 * @maxkartenwert + 1) do |wert|
+      wahrscheinlichkeit = 0.0
+      pos = karten.length - 1
+      karten.each do |k|
+        while k.wert + karten[pos].wert > wert and pos > 0
+          pos -= 1
+        end
+        wahrscheinlichkeit += (karten.length - 1 - pos) * 0.2
+        while k.wert +  karten[pos].wert == wert and pos > 0
+          pos -= 1
+          wahrscheinlichkeit += 0.1
+        end
+      end
+      wahrscheinlichkeit /= karten.length
+      karten.each do |k|
+        if (k <=> wert) == 1
+          wahrscheinlichkeit += 0.8
+        elsif (k <=> wert) == 0
+          wahrscheinlichkeit += 0.4
+        end
+      end
+      wahrscheinlichkeit / karten.length
     end
-    erg
   end
 
   # macht einen Zug

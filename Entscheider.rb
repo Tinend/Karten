@@ -7,8 +7,10 @@ require "entscheider/Eroberungswerter.rb"
 require "entscheider/Eroberungswerter_n.rb"
 require "entscheider/Hochstapler.rb"
 require "entscheider/Kamikaze_Hochstapler.rb"
+require "entscheider/Wasserdrache.rb"
 
-ENTSCHEIDER = [Mensch, Dummi, Minmax, Eroberungswerter, Hochstapler]
+ENTSCHEIDER = [Mensch, Dummi, Minmax, Eroberungswerter, Hochstapler, Wasserdrache]
+VERSTECKT = [Kamikaze_Hochstapler, Eroberungswerter_n]
 def entscheider_wahl
   puts "Welchen Entscheider wählst du?"
   ENTSCHEIDER.each_with_index do |e, i|
